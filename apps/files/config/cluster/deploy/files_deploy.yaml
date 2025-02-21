@@ -45,9 +45,8 @@ spec:
       serviceAccount: os-internal
       serviceAccountName: os-internal
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: 0
+        runAsNonRoot: false
       initContainers:
         - name: init-data
           image: busybox:1.28
@@ -73,12 +72,12 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
-            runAsUser: 1000
+            runAsUser: 0
           ports:
             - containerPort: 8080
           env:
             - name: FILES_SERVER_TAG
-              value: 'beclab/files-server:v0.2.55'
+              value: 'beclab/files-server:v0.2.57'
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
@@ -98,7 +97,7 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: true
-            runAsUser: 1000
+            runAsUser: 0
             privileged: true
           ports:
           - containerPort: 9090
@@ -114,11 +113,11 @@ spec:
 {{ end }}
 
         - name: files
-          image: beclab/files-server:v0.2.55
+          image: beclab/files-server:v0.2.57
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: true
-            runAsUser: 1000
+            runAsUser: 0
             privileged: true
           volumeMounts:
             - name: fb-data
@@ -260,7 +259,7 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: true
-            runAsUser: 1000
+            runAsUser: 0
             privileged: true
         - name: nginx
           image: 'nginx:stable-alpine3.17-slim'
@@ -394,7 +393,7 @@ spec:
           name: check-nats
       containers:
         - name: files
-          image: beclab/files-server:v0.2.55
+          image: beclab/files-server:v0.2.57
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
